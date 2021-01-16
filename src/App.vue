@@ -7,8 +7,11 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-
+import axios from 'axios'
 export default {
+  mounted(){
+    axios.get('https://essence-of-beauty.herokuapp.com/').then(res => console.log(res));
+  },
   name: 'App',
   components: {
     HelloWorld

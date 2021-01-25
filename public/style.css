@@ -2,11 +2,15 @@
     font-family: 'Poppins', sans-serif;
     text-align:  left;
 }
-body{
-    height: 100vh;
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+#app {
+    min-height: 100%;
 }
 .bg-darkPurple{
-    background-color: #523eab;
+    background-color: #523eab !important;
 }
 .bg-lavender{
     background-color: #cbb4e2;
@@ -25,7 +29,7 @@ body{
 #navbar .collapse a.router-link-exact-active {
     color: #f346a5;
 }
-.bg-pink{background-color: #f346a5;}
+.bg-pink{background-color: #f346a5 !important;}
 #navbar .collapse{
     margin-left: 20px;
 }
@@ -71,10 +75,12 @@ img{
 .footer{
     height: 45px;
     line-height: 45px;
+    /* margin-top: -45px; */
     font-size: 18px;
     color: rgb(0, 0, 0);
     background-color: #a882ce !important;
 }
+
 .text-color-white{color: white !important;}
 #contact{margin-bottom: 25px;}
 #faq{margin-bottom: 45px;}
@@ -109,7 +115,42 @@ img{
 .filters{
     background-color: #a882ce ;
 }
-
+#shop-items h3{
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+.m_-45{
+    margin-bottom: -45px;
+}
+.fa-times-circle:hover{
+    color:red;
+    cursor: pointer;
+}
+.mr-8{margin-right: 8em !important;}
+.modifyQuantity i:hover{
+    cursor: pointer;
+    color: #9b37ff;
+}
+#cart-buy{
+    width: 5em;
+}
+span.input-group-text{
+    border:none;
+}
+#addCode{
+    width: 20em;
+}
+#addCode input{
+    width: 15%;
+    height: 36px;
+    display: inline-block;
+}
+#addCode .input-group-append{
+    display: inline;
+}
+#addCode .input-group-append:hover{
+    cursor: pointer;
+}
 
 
 
@@ -145,4 +186,23 @@ img{
         margin-left: 0px;
 
     }
+}
+
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+    border: none;
 }

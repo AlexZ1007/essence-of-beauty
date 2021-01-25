@@ -32,7 +32,7 @@
                     <div class="input-group col-lg-3 col-md-5 col-sm-12 ml-auto">
                             <input type="text" class="form-control" placeholder="Search....." aria-label="Search for product" id="searchBar">
                             <div class="input-group-append btn-search">
-                                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                    <span class="input-group-text bg-pink"><i class="fa fa-search"></i></span>
                             </div>
                     </div>
                 </div>

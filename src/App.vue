@@ -8,11 +8,17 @@
 
 
 <script>
+import $ from 'jquery'
 import navbar from './views/Navbar.vue'
 export default {
   components:{ 
     navbar
-  }
+  },
+  watch:{
+    $route(){
+        $("#app").removeClass("m_-45");
+      }
+    } 
 }
 </script>
 

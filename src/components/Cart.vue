@@ -7,8 +7,9 @@
                 <tr>
                     <th scope="col" style="width: 10%"></th>
                     <th scope="col" style="min-width: 200px; width:20%">Name</th>
-                    <th scope="col" style="min-width: 80px; width: 20%">Quantity</th>
                     <th scope="col" style="width: 20%">Price</th>
+                    <th scope="col" style="min-width: 80px; width: 20%">Quantity</th>
+
                     <th scope="col" style="width: 5%"></th>
                 </tr>
             </thead>
@@ -16,15 +17,15 @@
                 <tr v-for="i in 4" :key="i">
                     <td><img src="https://via.placeholder.com/64X32" alt=""></td>
                     <th>Product {{i}}</th>
-                    <td>1 <div class="float-right  modifyQuantity"><i class="fas fa-minus mr-2 p-1"></i><i class="fas fa-plus p-1"></i></div></td>
                     <td>$14,99</td>
+                    <td>1 <div class="float-right  modifyQuantity"><i class="fas fa-minus mr-2 p-1"></i><i class="fas fa-plus p-1"></i></div></td>
                     <td class="text-center"><i class="far fa-times-circle"></i></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><b>Total price</b></td>
-                    <td>5</td>
-                    <td colspan="2"><b>$100</b></td>
+                    <td><b>$100</b></td>
+                    <td colspan="2"><b>5</b></td>
                 </tr>
             </tbody>
         </table>

@@ -151,9 +151,15 @@ span.input-group-text{
 #addCode .input-group-append:hover{
     cursor: pointer;
 }
-
-
-
+.pl-12{
+    padding-left: 0.75em !important;
+}
+.description p{
+    font-size: 1em;
+}
+.buy-product p{
+    font-size: 1.2em;
+}
 
 
 @media only screen and (max-width: 1000px){
@@ -169,6 +175,7 @@ span.input-group-text{
 @media only screen and (max-width: 768px){
     div.shop-item{margin-right: 0px !important;}
     .filters .dropdown-toggle{padding-left: 0px;}
+
 }
 @media only screen and (max-width: 400px){
     #navbar, .main-comp {
@@ -188,21 +195,15 @@ span.input-group-text{
     }
 }
 
-textarea:hover, 
-input:hover, 
-textarea:active, 
-input:active, 
-textarea:focus, 
-input:focus,
-button:focus,
-button:active,
-button:hover,
-label:focus,
-.btn:active,
-.btn.active
-{
-    outline:0px !important;
-    -webkit-appearance:none;
-    box-shadow: none !important;
-    border: none;
+/*Disable arorws for number inputs*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

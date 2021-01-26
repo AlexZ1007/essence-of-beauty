@@ -4,8 +4,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12  px-4 py-3 mb-2 text-white filters">
                 <div class="row">
                     
-                    <div class="dropdown col-lg-1 col-md-1 col-sm-12">
-                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown col-lg-1 col-md-1 col-sm-12 mr-3">
+                        <button class="btn btn-secondary dropdown-toggle pl-12" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Filter
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="dropdown col-lg-1 col-md-1 col-sm-12">
-                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle pl-12" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Categories
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -49,9 +49,9 @@
                         <h4>Name</h4>
                         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut, ea!</p>
                     </div>
-                    <div class="buy col-12 py-2">
-                        <b>$14,99</b>
-                        <router-link to="/shop/product/id" class="float-right px-2 bg-pink btn-buy">Buy now</router-link>
+                    <div class="buy col-12 mb-3 d-flex align-content-center">
+                        <b class="my-auto">$14,99</b>
+                        <router-link to="/shop/product/id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
                     </div>
                 </div>
             </div>

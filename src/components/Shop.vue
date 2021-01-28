@@ -5,7 +5,7 @@
                 <div class="row">
                     
                     <div class="dropdown col-lg-1 col-md-1 col-sm-12 mr-3">
-                        <button class="btn btn-secondary dropdown-toggle pl-12" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button id="filter_dropdown" class="btn btn-secondary dropdown-toggle pl-12" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Filter
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -19,14 +19,14 @@
                     </div>
 
                     <div class="dropdown col-lg-1 col-md-1 col-sm-12">
-                        <button class="btn btn-secondary dropdown-toggle pl-12" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button id="categories_dropdown" class="btn btn-secondary dropdown-toggle pl-12" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Categories
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" v-on:click="filterCat('ALL')">All</a>
-                            <a class="dropdown-item" v-on:click="filterCat('cat1')">Category 1</a>
-                            <a class="dropdown-item" v-on:click="filterCat('cat2')">Category 2</a>
-                            <a class="dropdown-item" v-on:click="filterCat('cat3')">Category 3</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Produse fata')">Produse fata</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Farduri')">Farduri</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Accesorii')">Accesorii</a>
                         </div>
                     </div>
 
@@ -44,7 +44,7 @@
 
             <div class="row justify-content-center m-0 col-lg-12 col-md-12 col-sm-12">
                 <div  class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple"
-                      v-for="(product) in products" v-bind:key="product.id">
+                      v-for="(product,index) in products" v-bind:key="product.id">
                     <div class="col-12 text-center"><img src="https://via.placeholder.com/250X90" class="img-fluid"></div>
                     <div class="info-product col-12 py-3">
                         <h4>{{product.name}}</h4>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="buy col-12 d-flex align-content-center mt-auto">
                         <b class="my-auto">${{product.price}}</b>
-                        <router-link to="/shop/product/id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
+                        <router-link :to="'/shop/product/'+index" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
                     </div>
                 </div>
             </div>
@@ -73,18 +73,22 @@ export default {
     methods:{
         order(orderBy, direction){
             let modifier=1;
-            if(direction=="des") modifier=-1
+            let textArrow='&#8593;';
+            if(direction=="des"){ modifier=-1; textArrow='&#8595;'}
             console.log(orderBy);
             this.products.sort((p1, p2)=>{
                 if(p1[orderBy]<p2[orderBy]){ return -1*modifier }
                 if(p1[orderBy]>p2[orderBy]){ return 1*modifier }
                 return 0;
             });
+            let filterText=orderBy[0].toUpperCase()+orderBy.split('').splice(1).join('');
+            $('#filter_dropdown').html(filterText+' '+textArrow);
             this.checkForProductFound();
         },
         filterCat(category){
             if(category=='ALL') this.products=this.$parent.products;
-            else this.products = this.$parent.products.filter(p=> {if(p['category']==category) return 1;});
+            else this.products = this.$parent.products.filter(p=> {if(p['category']==category) return 1;})
+            $('#categories_dropdown').text(category);
             this.checkForProductFound();
         },
         search(){

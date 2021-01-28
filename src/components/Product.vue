@@ -25,12 +25,14 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 p-2 text-center buy-product">
-                <h3 class="text-center">Product {{id}}</h3>
-                <p class="text-center">$20,99/unit</p>
-                <label for="" class="mr-3">Quantity: </label><input type="number" class="form-control d-inline w-20" id="quantity" value="1">
-                <div class="buy col-12 mb-3 d-flex align-content-center">
-                        <p class="my-auto"><b class="">Total price:  $14,99</b></p>
-                        <router-link to="/shop/product/id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Add to cart</router-link>
+                <h3 class="text-center">{{product.name}}</h3>
+                <p class="text-center">${{product.price}}/unit</p>
+                <label for="" class="mr-3">Quantity: </label>
+                <input type="number" class="form-control d-inline w-20" id="quantity" value="1" v-on:input="updateTotalPrice()"><br>
+                <span class="text-danger" id="inputError"></span>
+                <div class="buy col-12 mb-3 d-flex align-content-center mt-3">
+                        <p class="my-auto"><b class="">Total price:  ${{totalPrice}}</b></p>
+                        <button class="ml-auto py-1 px-2 bg-pink btn text-white btn-buy my-auto" v-on:click="addToCart()">Add to cart</button>
                 </div>
             </div>    
         </div>  
@@ -42,7 +44,40 @@
 </template>
 
 <script>
+import $ from 'jquery'
 export default {
     props: ['id'],
+    data: function(){
+        return{
+            product: this.$parent.products[this.id],
+            totalPrice: this.$parent.products[this.id].price,
+            cart: this.$parent.cart
+        }
+    },
+    methods:{
+        updateTotalPrice(){
+            let quantity=$('#quantity').val();
+            // Input check
+            if(quantity<1 || quantity>999){
+                $('#inputError').text('Input must be between 1 and 999'); this.inputError=true;
+                return;
+            } else $('#inputError').text('');
+            this.inputError=false;
+            this.totalPrice = (this.product.price*quantity).toFixed(2);
+        },
+        addToCart(){
+            let quantity;
+            const product=this.product;
+            if(this.inputError) quantity=1;
+            else quantity=$('#quantity').val();
+            this.cart.push({
+                name: product.name,
+                price: product.price,
+                quantity: quantity,
+                totalPrice: (product.price*quantity).toFixed(2),
+            });
+            localStorage.cart=JSON.stringify(this.cart);
+        }
+    }
 }
 </script>

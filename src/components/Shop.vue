@@ -9,12 +9,12 @@
                             Filter
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Price <span class="float-right">&#8593;</span></a>
-                            <a class="dropdown-item" href="#">Name <span class="float-right">&#8593;</span></a>
-                            <a class="dropdown-item" href="#">Rating <span class="float-right">&#8593;</span></a>
-                            <a class="dropdown-item" href="#">Price <span class="float-right">&#8595;</span></a>
-                            <a class="dropdown-item" href="#">Name <span class="float-right">&#8595;</span></a> 
-                            <a class="dropdown-item" href="#">Rating <span class="float-right">&#8595;</span></a>
+                            <a class="dropdown-item" v-on:click="order('price', 'asc')">Price <span class="float-right">&#8593;</span></a>
+                            <a class="dropdown-item" v-on:click="order('name', 'asc')">Name <span class="float-right">&#8593;</span></a>
+                            <!-- <a class="dropdown-item" href="#">Rating <span class="float-right">&#8593;</span></a> -->
+                            <a class="dropdown-item" v-on:click="order('price', 'des')">Price <span class="float-right">&#8595;</span></a>
+                            <a class="dropdown-item" v-on:click="order('name', 'des')">Name <span class="float-right">&#8595;</span></a> 
+                            <!-- <a class="dropdown-item" href="#">Rating <span class="float-right">&#8595;</span></a> -->
                         </div>
                     </div>
 
@@ -23,15 +23,16 @@
                             Categories
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Category 1</a>
-                            <a class="dropdown-item" href="#">Category 2</a>
-                            <a class="dropdown-item" href="#">Category 3</a>
+                            <a class="dropdown-item" v-on:click="filterCat('ALL')">All</a>
+                            <a class="dropdown-item" v-on:click="filterCat('cat1')">Category 1</a>
+                            <a class="dropdown-item" v-on:click="filterCat('cat2')">Category 2</a>
+                            <a class="dropdown-item" v-on:click="filterCat('cat3')">Category 3</a>
                         </div>
                     </div>
 
                     <div class="input-group col-lg-3 col-md-5 col-sm-12 ml-auto">
                             <input type="text" class="form-control" placeholder="Search....." aria-label="Search for product" id="searchBar">
-                            <div class="input-group-append btn-search">
+                            <div class="input-group-append btn-search" v-on:click="search()">
                                     <span class="input-group-text bg-pink"><i class="fa fa-search"></i></span>
                             </div>
                     </div>
@@ -43,20 +44,58 @@
 
             <div class="row justify-content-center m-0 col-lg-12 col-md-12 col-sm-12">
                 <div  class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple"
-                      v-for="i in 12" :key="i">
+                      v-for="(product) in products" v-bind:key="product.id">
                     <div class="col-12 text-center"><img src="https://via.placeholder.com/250X90" class="img-fluid"></div>
                     <div class="info-product col-12 py-3">
-                        <h4>Name</h4>
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut, ea!</p>
+                        <h4>{{product.name}}</h4>
+                        <p>{{product.description}}</p>
                     </div>
-                    <div class="buy col-12 mb-3 d-flex align-content-center">
-                        <b class="my-auto">$14,99</b>
+                    <div class="buy col-12 d-flex align-content-center mt-auto">
+                        <b class="my-auto">${{product.price}}</b>
                         <router-link to="/shop/product/id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
                     </div>
                 </div>
             </div>
-        
+            <div class="text-center"><span class="text-danger" id="noProductFound"></span></div>
         </div>
         
 
 </template>
+
+<script>
+import $ from 'jquery'
+export default {
+    data: function(){
+        return{
+            products: this.$parent.products,
+        }
+    },
+    methods:{
+        order(orderBy, direction){
+            let modifier=1;
+            if(direction=="des") modifier=-1
+            console.log(orderBy);
+            this.products.sort((p1, p2)=>{
+                if(p1[orderBy]<p2[orderBy]){ return -1*modifier }
+                if(p1[orderBy]>p2[orderBy]){ return 1*modifier }
+                return 0;
+            });
+            this.checkForProductFound();
+        },
+        filterCat(category){
+            if(category=='ALL') this.products=this.$parent.products;
+            else this.products = this.$parent.products.filter(p=> {if(p['category']==category) return 1;});
+            this.checkForProductFound();
+        },
+        search(){
+            let searchString=$("#searchBar").val().toUpperCase();
+            this.products = this.$parent.products.filter(p =>{ if(p['name'].toUpperCase().includes(searchString)){ return 1}});
+            this.checkForProductFound();
+        },
+        checkForProductFound(){
+            if(this.products.length==0) $('#noProductFound').text('No products found!');
+            else  $('#noProductFound').text('');
+        },
+    },
+}
+</script>

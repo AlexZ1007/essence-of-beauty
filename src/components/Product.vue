@@ -28,7 +28,7 @@
                 <h3 class="text-center">Product {{id}}</h3>
                 <p class="text-center">$20,99/unit</p>
                 <label for="" class="mr-3">Quantity: </label><input type="number" class="form-control d-inline w-20" id="quantity" value="1">
-                <div class="buy col-12 mb-3 d-flex align-content-center mt-4">
+                <div class="buy col-12 mb-3 d-flex align-content-center">
                         <p class="my-auto"><b class="">Total price:  $14,99</b></p>
                         <router-link to="/shop/product/id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Add to cart</router-link>
                 </div>
@@ -43,6 +43,6 @@
 
 <script>
 export default {
-    props: ['id']
+    props: ['id'],
 }
 </script>

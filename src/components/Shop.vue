@@ -37,14 +37,12 @@
                             </div>
                     </div>
                 </div>
-                
            </div>
-
-            </div>
+        </div>
 
             <div class="row justify-content-center m-0 col-lg-12 col-md-12 col-sm-12">
                 <div  class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple"
-                      v-for="(product,index) in products" v-bind:key="product.id">
+                      v-for="(product,index) in products" v-bind:key="index">
                     <div class="col-12 text-center"><img src="https://via.placeholder.com/250X90" class="img-fluid"></div>
                     <div class="info-product col-12 py-3">
                         <h4>{{product.name}}</h4>
@@ -52,7 +50,7 @@
                     </div>
                     <div class="buy col-12 d-flex align-content-center mt-auto">
                         <b class="my-auto">${{product.price}}</b>
-                        <router-link :to="'/shop/product/'+index" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
+                        <router-link :to="'/shop/product/'+product.id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
                     </div>
                 </div>
             </div>

@@ -49,7 +49,7 @@ export default {
     props: ['id'],
     data: function(){
         return{
-            product: this.$parent.products[this.id],
+            product: this.$parent.products.find(product => product.id==this.id),
             totalPrice: this.$parent.products[this.id].price,
             cart: this.$parent.cart
         }

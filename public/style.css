@@ -163,7 +163,30 @@ span.input-group-text{
 .dropdown-menu:hover{
     cursor: pointer;
 }
+.alert{
+    width: 100% !important;
+    max-width: 250px;
+    animation: fadeInLeft 1s;
+}
+div .bg-danger{
+    background-color: rgb(255, 136, 136) !important;
+}
+#productOutOfStock{
+    font-weight: bold;
+    font-size: 1.5em;
+}
 
+@keyframes fadeInLeft {
+    0% {
+       opacity: 0;
+       transform: translateX(-20px);
+    }
+    100% {
+       opacity: 1;
+       transform: translateX(0);
+    }
+ }   
+ 
 @media only screen and (max-width: 1000px){
     #topProducts .product{
         margin-bottom: 15px;

@@ -23,10 +23,10 @@
                             Categories
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" v-on:click="filterCat('ALL')">All</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Produse fata')">Produse fata</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Farduri')">Farduri</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Accesorii')">Accesorii</a>
+                            <a class="dropdown-item" v-on:click="filterCat('All', $parent.products)">All</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Produse fata', $parent.products)">Produse fata</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Farduri', $parent.products)">Farduri</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Accesorii', $parent.products)">Accesorii</a>
                         </div>
                     </div>
 
@@ -41,8 +41,8 @@
         </div>
 
             <div class="row justify-content-center m-0 col-lg-12 col-md-12 col-sm-12">
-                <div  class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple"
-                      v-for="(product,index) in products" v-bind:key="index">
+                <div class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple"
+                      v-for="(product,index) in products"  v-bind:key="index" >
                     <div class="col-12 text-center"><img src="https://via.placeholder.com/250X90" class="img-fluid"></div>
                     <div class="info-product col-12 py-3">
                         <h4>{{product.name}}</h4>
@@ -66,26 +66,41 @@ export default {
     data: function(){
         return{
             products: this.$parent.products,
+            sortBy: '',
+            sortDir: '',
+            filterBy: 'All',
         }
     },
     methods:{
         order(orderBy, direction){
+            if(orderBy=='') return;
+            $("#searchBar").val('');
+            // Save the filter settings
+            this.sortBy=orderBy;
+            this.sortDir=direction;
+
             let modifier=1;
             let textArrow='&#8593;';
+
             if(direction=="des"){ modifier=-1; textArrow='&#8595;'}
-            console.log(orderBy);
-            this.products.sort((p1, p2)=>{
-                if(p1[orderBy]<p2[orderBy]){ return -1*modifier }
-                if(p1[orderBy]>p2[orderBy]){ return 1*modifier }
-                return 0;
+                this.products.sort((p1, p2)=>{
+                    if(p1[orderBy]<p2[orderBy]){ return -1*modifier }
+                    if(p1[orderBy]>p2[orderBy]){ return 1*modifier }
+                    return 0;
             });
             let filterText=orderBy[0].toUpperCase()+orderBy.split('').splice(1).join('');
             $('#filter_dropdown').html(filterText+' '+textArrow);
             this.checkForProductFound();
         },
-        filterCat(category){
-            if(category=='ALL') this.products=this.$parent.products;
-            else this.products = this.$parent.products.filter(p=> {if(p['category']==category) return 1;})
+        filterCat(category, arrayToFilter){
+            // Save the filter settings
+            this.filterBy=category;
+            $("#searchBar").val('');
+
+            if(category!='All') this.products=arrayToFilter.filter(p => {
+                if(p['category']==category) return 1;
+            });
+            else this.products=arrayToFilter;
             $('#categories_dropdown').text(category);
             this.checkForProductFound();
         },
@@ -93,6 +108,9 @@ export default {
             let searchString=$("#searchBar").val().toUpperCase();
             this.products = this.$parent.products.filter(p =>{ if(p['name'].toUpperCase().includes(searchString)){ return 1}});
             this.checkForProductFound();
+            // Filter the found products with the filter settings
+            this.order(this.sortBy, this.sortDir);
+            this.filterCat(this.filterBy, this.products);
         },
         checkForProductFound(){
             if(this.products.length==0) $('#noProductFound').text('No products found!');

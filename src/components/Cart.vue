@@ -30,19 +30,34 @@
                     <td></td>
                     <td><b>Total price</b></td>
                     <td colspan="2" id="totalPrice"><b>0</b></td>
-                    <td colspan="2" id="totalQuantity"><b>5</b></td>
+                    <td colspan="2" id="totalQuantity"><b>0</b></td>
                 </tr>
             </tbody>
         </table>
-        <div class="row">
+        <div class="row mb-2">
             <div id="addCode" class="input-group mr-auto mb-2">
                 <input type="text" class="form-control" placeholder="Add code" aria-label="Insert a code" id="codeInput">
                 <div class="input-group-append">
-                        <span class="input-group-text bg-darkPurple text-white"><i class="fas fa-plus p-1"></i></span>
+                        <span class="input-group-text bg-darkPurple text-white" ><i class="fas fa-plus p-1"></i></span>
                 </div>
             </div>
-            <button id="cart-buy" class="float-right btn bg-pink text-white">Buy</button>
+            <button id="cart-buy" class="float-right btn bg-pink text-white" v-on:click="buyProducts()">Buy</button>
         </div>
+        <!-- Modal pop-up -->
+        <div class="modal fade" id="productBoughtModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content text-white">
+                    <div class="modal-header">
+                        <button type="button" class="close px-3 p-1" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                        </div>
+                    <div class="modal-body text-center">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </template>
 
@@ -51,15 +66,55 @@ import $ from 'jquery'
 export default {
     mounted(){
         $("#app").addClass("m_-45");
-        if(localStorage.cart){ console.log(JSON.parse(localStorage.cart)); this.cart=JSON.parse(localStorage.cart); console.log(this.cart)}
+        if(localStorage.cart) this.cart=JSON.parse(localStorage.cart);
         this.updateTotalData();
     },
     data: function(){
         return {
             cart: this.$parent.cart,
+            discountCode: {discountBy: 0},
+            codeApplied: false,
         }
     },
     methods:{
+        buyProducts(){
+            // Validate
+            if(this.cart.length==0) return 0;
+            for(let i=0;i<this.cart.length;i++){
+                let cartItem=this.cart[i];
+                let product=this.$parent.products.find(prod=>prod.id==cartItem.id)
+                if(product.stock<cartItem.quantity){ 
+                    this.displayModal('bg-danger', '<b>Error!</b> There are only <b>'+product.stock+'</b> of <b>'+product.name+'</b> remaining and you have <b>'+cartItem.quantity+'</b> in cart! Adjust the qunatity to complete your purchase!');
+                    return;
+                }
+                product.stock-=cartItem.quantity;
+            }
+            
+            this.displayModal('bg-darkPurple', 'Products bought successfully!');
+            // Remove all variables
+            this.cart=[];
+            this.$parent.cart=[];
+            localStorage.cart=JSON.stringify(this.cart);
+            $('#totalPrice b').text('$0.00');
+            $('#totalQuantity b').text('0');
+            this.discountCode= {discountBy: 0};
+            this.codeApplied= false;
+        },
+        discount(){
+            let codeInputVal=$("#codeInput").val();
+            this.discountCode=this.$parent.discountCodes.find( code => {if(code['code']==codeInputVal) return 1;});
+            
+            if(this.codeApplied){ this.printAlert('alert-danger', 'You have already applied a code!'); return 0;}
+            else if(this.discountCode==undefined){ this.printAlert('alert-danger', 'Invalid code!'); return 0;}
+            
+            let totalPrice=$('#totalPrice b').text(); 
+            totalPrice = parseFloat(totalPrice.split('').splice(1).join(''), 2)   // Remove the $ symbol and transform to int
+            totalPrice -= (this.discountCode.discountBy/100)*totalPrice;
+            $('#totalPrice b').text('$'+totalPrice.toFixed(2)); 
+
+            this.printAlert('alert-success', 'Code applied!');
+            this.codeApplied=true;
+        },
         updateTotalData(){
             let totalItemsPrice=0;
             let totalItemsQuantity=0;
@@ -67,21 +122,39 @@ export default {
                 totalItemsPrice+=parseFloat(this.cart[i].totalPrice);
                 totalItemsQuantity+=parseInt(this.cart[i].quantity);
             }
-            $('#totalPrice').html('<b>'+totalItemsPrice.toFixed(2)+'</b>');
+            totalItemsPrice -= (this.discountCode.discountBy/100)*totalItemsPrice;
+            $('#totalPrice').html('<b>$'+totalItemsPrice.toFixed(2)+'</b>');
             $('#totalQuantity').html('<b>'+totalItemsQuantity+'</b>');
             localStorage.cart=JSON.stringify(this.cart);
         },
         deleteProduct(index){
-            console.log(this.cart.splice(index, 1));
+            this.cart.splice(index, 1);
             this.updateTotalData();
         },
         updateQuantity(index, direction){
             let quantity=parseInt(this.cart[index].quantity)
-            if((quantity+direction)<1 || (quantity+direction)>999) return;
+            if((quantity+direction)<1 || (quantity+direction)>Math.min(999, this.cart[index].max_quantity)) return;
             this.cart[index].quantity= quantity+direction;            
             this.cart[index].totalPrice= (this.cart[index].price*(quantity+direction)).toFixed(2);            
             this.updateTotalData();
-        }
+        },
+        // Helper functions
+        displayModal(className, message){
+            let modal = $('#productBoughtModal');
+            // Remove all bg classes
+            $('.modal-content:eq(0)').removeClass('bg-darkPurple').removeClass('bg-danger');
+            // // Add class
+            $('.modal-content').addClass(className);
+            $('.modal-body').html(message);
+            modal.modal('show');
+        },
+        printAlert(type, message){
+            $('.alert:eq(0)').remove();
+            $('#shop-items').append('<div class="alert alert-dismissible '+type+'">'+
+                                        '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+
+                                        message+
+                                    '</div>')
+        },
     }
 }
 </script>

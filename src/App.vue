@@ -22,6 +22,7 @@ export default {
           name: "Ruj",
           description: "Rujul este un produs foarte bun si e chiar +1",
           category: 'Produse fata',
+          stock: 780,
           price: 15.99
         },
         {
@@ -29,6 +30,7 @@ export default {
           name: "Fard de ochi",
           description: "Bun de pus in loc de ochi",
           category: 'Farduri',
+          stock: 1250,
           price: 19.99
         },
         {
@@ -36,6 +38,7 @@ export default {
           name: "Paleta de machiaj",
           description: "Paleta de machiaj este chiar casa, este un produs foarte bun si e chiar +1",
           category: 'Produse fata',
+          stock: 10,
           price: 17.99
         },
         {
@@ -43,15 +46,20 @@ export default {
           name: "Pensule",
           description: "Pensule de machiaj este chiar casa, bun si e chiar +1",
           category: 'Accesorii',
+          stock: 3,
           price: 17.99
         },
         
       ],
       cart:[],
+      discountCodes:[
+        {code: 'malakie10', discountBy: 10},
+        {code: 'candvreodata', discountBy: 30},
+      ]
     }
   },
   mounted(){
-    if(localStorage.cart){ console.log(JSON.parse(localStorage.cart)); this.cart=JSON.parse(localStorage.cart); console.log(this.cart)}
+    if(localStorage.cart) this.cart=JSON.parse(localStorage.cart); 
 
   },
   watch:{

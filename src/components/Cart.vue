@@ -36,8 +36,8 @@
         </table>
         <div class="row mb-2">
             <div id="addCode" class="input-group mr-auto mb-2">
-                <input type="text" class="form-control" placeholder="Add code" aria-label="Insert a code" id="codeInput">
-                <div class="input-group-append">
+                <input type="text" class="form-control" placeholder="Add a code" aria-label="Insert a code" id="codeInput">
+                <div class="input-group-append" v-on:click="discount()">
                         <span class="input-group-text bg-darkPurple text-white" ><i class="fas fa-plus p-1"></i></span>
                 </div>
             </div>
@@ -63,6 +63,7 @@
 
 <script>
 import $ from 'jquery'
+import axios from 'axios'
 export default {
     mounted(){
         $("#app").addClass("m_-45");
@@ -82,16 +83,20 @@ export default {
             if(this.cart.length==0) return 0;
             for(let i=0;i<this.cart.length;i++){
                 let cartItem=this.cart[i];
-                let product=this.$parent.products.find(prod=>prod.id==cartItem.id)
+                let product=this.$parent.products.find(prod=>prod._id==cartItem._id)
+                // TBA: check for stock in db
                 if(product.stock<cartItem.quantity){ 
-                    this.displayModal('bg-danger', '<b>Error!</b> There are only <b>'+product.stock+'</b> of <b>'+product.name+'</b> remaining and you have <b>'+cartItem.quantity+'</b> in cart! Adjust the qunatity to complete your purchase!');
+                    this.displayModal('bg-danger', '<b>Error!</b> There are only <b>'+product.stock+' '+product.name+'</b> remaining and you have <b>'+cartItem.quantity+'</b> in the cart! Adjust the qunatity to complete your purchase!');
                     return;
                 }
+                // Update on client
                 product.stock-=cartItem.quantity;
+                // Update on db 
+                axios.put(this.$parent.serverHost+"/products/update/"+cartItem._id, product);
             }
             
             this.displayModal('bg-darkPurple', 'Products bought successfully!');
-            // Remove all variables
+            // Reset all variables
             this.cart=[];
             this.$parent.cart=[];
             localStorage.cart=JSON.stringify(this.cart);
@@ -103,10 +108,10 @@ export default {
         discount(){
             let codeInputVal=$("#codeInput").val();
             this.discountCode=this.$parent.discountCodes.find( code => {if(code['code']==codeInputVal) return 1;});
-            
+
             if(this.codeApplied){ this.printAlert('alert-danger', 'You have already applied a code!'); return 0;}
             else if(this.discountCode==undefined){ this.printAlert('alert-danger', 'Invalid code!'); return 0;}
-            
+          
             let totalPrice=$('#totalPrice b').text(); 
             totalPrice = parseFloat(totalPrice.split('').splice(1).join(''), 2)   // Remove the $ symbol and transform to int
             totalPrice -= (this.discountCode.discountBy/100)*totalPrice;
@@ -129,6 +134,7 @@ export default {
         },
         deleteProduct(index){
             this.cart.splice(index, 1);
+            this.$parent.cart=this.cart;
             this.updateTotalData();
         },
         updateQuantity(index, direction){

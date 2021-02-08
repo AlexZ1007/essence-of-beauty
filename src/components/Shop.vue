@@ -3,7 +3,7 @@
         <div class="row m-0  justify-content-center">
             <div class="col-lg-12 col-md-12 col-sm-12  px-4 py-3 mb-2 text-white filters">
                 <div class="row">
-                    
+    
                     <div class="dropdown col-lg-1 col-md-1 col-sm-12 mr-3">
                         <button id="filter_dropdown" class="btn btn-secondary dropdown-toggle pl-12" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Filter
@@ -39,18 +39,25 @@
                 </div>
            </div>
         </div>
+            
 
+            <div id="loading-products" class="mx-auto" hidden="true"></div>
+            <div class="row m-0 pageNavigation">
+                <button v-on:click="changePage(-1)" class="py-1 px-2 bg-pink btn-buy">Previous page</button>
+                <span class="mx-auto"><b>Page {{pageNum}}</b></span>
+                <button v-on:click="changePage(1)"  class=" b-0 py-1 px-2 bg-pink btn-buy my-auto">Next Page</button>
+            </div>
             <div class="row justify-content-center m-0 col-lg-12 col-md-12 col-sm-12">
-                <div class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple"
+                <div class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple product"
                       v-for="(product,index) in products"  v-bind:key="index" >
                     <div class="col-12 text-center"><img src="https://via.placeholder.com/250X90" class="img-fluid"></div>
                     <div class="info-product col-12 py-3">
                         <h4>{{product.name}}</h4>
-                        <p>{{product.description}}</p>
+                        <p>{{product.description.substring(0,80)+'...'}}</p>
                     </div>
-                    <div class="buy col-12 d-flex align-content-center mt-auto">
+                    <div class="buy col-12 d-flex align-content-center mb-2">
                         <b class="my-auto">${{product.price}}</b>
-                        <router-link :to="'/shop/product/'+product.id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
+                        <router-link :to="'/shop/product/'+product._id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
                     </div>
                 </div>
             </div>
@@ -62,6 +69,7 @@
 
 <script>
 import $ from 'jquery'
+import axios from 'axios'
 export default {
     data: function(){
         return{
@@ -69,9 +77,20 @@ export default {
             sortBy: '',
             sortDir: '',
             filterBy: 'All',
+            pageNum: 1,
+        }
+    },
+    async mounted(){
+        if(this.$parent.products.length==0) {
+            $('#loading-products').removeAttr('hidden');
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/12").then( res => res.data.results);
+            $('#loading-products').hide();
         }
     },
     methods:{
+        // ***********
+        // Filter functions
+        // ***********
         order(orderBy, direction){
             if(orderBy=='') return;
             $("#searchBar").val('');
@@ -112,6 +131,32 @@ export default {
             this.order(this.sortBy, this.sortDir);
             this.filterCat(this.filterBy, this.products);
         },
+        
+        // ***********
+        // Pagination
+        // int dir 1 || -1
+        // ***********
+        async changePage(dir){
+            let tempPageNum=this.pageNum+dir;
+            if(tempPageNum<1) return 0;
+
+            
+            let category=this.filterBy;
+            if(category=='All') category='';
+            
+            let tempProducts = await axios.get(this.$parent.serverHost+"/products/"+tempPageNum+"/2/"+category).then(res => res.data.results)
+            if(tempProducts.length==0) return 0; // this.pageNum is the last page
+
+            this.products=tempProducts;
+            this.pageNum=tempPageNum;
+
+            // Order the new products
+            this.order(this.sortBy, this.sortDir);
+        },
+
+        // ***********
+        // Useful function
+        // ***********
         checkForProductFound(){
             if(this.products.length==0) $('#noProductFound').text('No products found!');
             else  $('#noProductFound').text('');

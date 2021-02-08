@@ -2,13 +2,14 @@
   <div id="app">
     <navbar></navbar>
     <router-view/>
-    
   </div>
+
 </template>
 
 
 <script>
 import $ from 'jquery'
+import axios from 'axios';
 import navbar from './views/Navbar.vue'
 export default {
   components:{ 
@@ -16,51 +17,25 @@ export default {
   },
   data: function(){
     return{
-      products:[
-        {
-          id: 0,
-          name: "Ruj",
-          description: "Rujul este un produs foarte bun si e chiar +1",
-          category: 'Produse fata',
-          stock: 780,
-          price: 15.99
-        },
-        {
-          id: 1,
-          name: "Fard de ochi",
-          description: "Bun de pus in loc de ochi",
-          category: 'Farduri',
-          stock: 1250,
-          price: 19.99
-        },
-        {
-          id: 2,
-          name: "Paleta de machiaj",
-          description: "Paleta de machiaj este chiar casa, este un produs foarte bun si e chiar +1",
-          category: 'Produse fata',
-          stock: 10,
-          price: 17.99
-        },
-        {
-          id: 3,
-          name: "Pensule",
-          description: "Pensule de machiaj este chiar casa, bun si e chiar +1",
-          category: 'Accesorii',
-          stock: 3,
-          price: 17.99
-        },
-        
-      ],
+      products:[],
       cart:[],
       discountCodes:[
         {code: 'malakie10', discountBy: 10},
         {code: 'candvreodata', discountBy: 30},
-      ]
+      ],
+      serverHost: "http://localhost:8080"
     }
   },
-  mounted(){
+  async created(){ 
+    this.products= await axios.get(this.serverHost+"/products/1/12").then( res => res.data.results);
+  },
+   mounted(){
     if(localStorage.cart) this.cart=JSON.parse(localStorage.cart); 
-
+    
+    // axios.post(this.serverHost+"/products/create", {name: 'Gene false 1', category: 'Produse fata', stock: 50, description: "Cand vreodata?", price: 10.99}).then(res=> console.log(res.data));
+    // axios.post(this.serverHost+"/products/create", {name: 'Ruj', category: 'Produse fata', stock: 90, description: "Ruj", price: 6.99}).then(res=> console.log(res.data));
+    //axios.put("http://localhost:8080/products/update/601ac6f8798d6510b4386753", {name: 'Gene false', category: 'Produse fata', stock: 30, description: "Cand vreodata??", price: 27.99}).then(res=> console.log(res.data));
+    //axios.delete("http://localhost:8080/products/delete/601ac6f8798d6510b4386752").then(res=>console.log(res.data));
   },
   watch:{
     $route(){

@@ -33,14 +33,12 @@
                             <button class="ml-auto py-1 px-2 bg-pink btn text-white btn-buy my-auto" v-on:click="addToCart()">Add to cart</button>
                     </div>
                 </div>
-                <div v-else class="text-center" id="productOutOfStock">Product out of stock!</div>
+                <div v-else class="text-center" id="productOutOfStock">Out of stock!</div>
                 
             </div>    
         </div>  
-        <div class="row description">
-            <h3>Description</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi praesentium odit sapiente, laborum odio eos facilis corporis, hic ea nam optio nihil obcaecati ad natus numquam illo. Qui impedit eius asperiores nisi culpa? Dicta esse magni id molestias, architecto, corporis in explicabo dignissimos quos libero alias. Dolorem, mollitia molestias. Alias at est dolor eos deserunt amet temporibus neque molestias quidem, deleniti laudantium quae dignissimos, illo non quaerat, minima ad suscipit.</p>    
-        </div>  
+            <h3><b>Description</b></h3>
+            <p id="desc">{{product.description}}</p>
     </div> 
 </template>
 
@@ -50,10 +48,13 @@ export default {
     props: ['id'],
     data: function(){
         return{
-            product: this.$parent.products.find(product => product.id==this.id),
-            totalPrice: this.$parent.products[this.id].price,
+            product: this.$parent.products.find(product => product._id==this.id),
+            totalPrice: 0,
             cart: this.$parent.cart
         }
+    },
+    mounted(){
+        this.totalPrice = this.product.price;
     },
     methods:{
         updateTotalPrice(){
@@ -75,16 +76,25 @@ export default {
                 return;
             }
             else quantity=$('#quantity').val();
-            this.cart.push({
-                id: product.id,
+
+            // Check if there is already a product in the cart
+            if(this.cart.find(p => p._id==product._id)!=undefined) this.cart.find(p => {
+                if(p._id==product._id){ 
+                    p.quantity=parseInt(p.quantity)+parseInt(quantity); 
+                    return 1; 
+                }
+              });
+            else this.cart.push({
+                _id: product._id,
                 name: product.name,
                 price: product.price,
                 quantity: quantity,
                 max_quantity: product.stock,
                 totalPrice: (product.price*quantity).toFixed(2),
-            });
+              });
+            // Display alert
             this.printAlert('alert-success', 'Product added to cart!')
-            localStorage.cart=JSON.stringify(this.cart);
+            localStorage.cart=JSON.stringify(this.cart); // Store in localstorage
         },
         printAlert(type, message){
             $('.alert:eq(0)').remove();

@@ -175,7 +175,33 @@ div .bg-danger{
     font-weight: bold;
     font-size: 1.5em;
 }
-
+#product-display #desc{
+    font-size: 1.2em
+}
+.product .info-product p{
+    margin-bottom: 0.5em !important;
+    min-height: 72px !important;
+}
+#loading-products{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    border: 8px solid #f3f3f3; 
+    border-top: 8px solid pink;
+    animation: rotateLoading 1s infinite linear;
+    
+}
+.pageNavigation button{
+    border: 0;
+}
+.pageNavigation button:focus{
+    border: 0;
+    outline: none;
+}
+@keyframes rotateLoading{
+    0%{transform: rotate(0deg);}
+    100%{transform: rotate(360deg);}
+}
 @keyframes fadeInLeft {
     0% {
        opacity: 0;
@@ -200,7 +226,10 @@ div .bg-danger{
 @media only screen and (max-width: 768px){
     div.shop-item{margin-right: 0px !important;}
     .filters .dropdown-toggle{padding-left: 0px;}
-
+    .dropdown{ margin-bottom: 0.5em;}
+    .nav-link{ margin-left: 0 !important;}
+    #cart{ padding-left: 0px;}
+    #navbarSupportedContent{margin-left: 0 !important;}
 }
 @media only screen and (max-width: 400px){
     #navbar, .main-comp {

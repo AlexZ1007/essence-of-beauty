@@ -23,10 +23,10 @@
                             Categories
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" v-on:click="filterCat('All', $parent.products)">All</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Produse fata', $parent.products)">Produse fata</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Farduri', $parent.products)">Farduri</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Accesorii', $parent.products)">Accesorii</a>
+                            <a class="dropdown-item" v-on:click="filterCat('All')">All</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Produse fata')">Produse fata</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Farduri')">Farduri</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Accesorii')">Accesorii</a>
                         </div>
                     </div>
 
@@ -74,16 +74,17 @@ export default {
     data: function(){
         return{
             products: this.$parent.products,
-            sortBy: '',
-            sortDir: '',
+            sortBy: 'none',
+            sortDir: 0,
             filterBy: 'All',
+            searchString: '',
             pageNum: 1,
         }
     },
     async mounted(){
         if(this.$parent.products.length==0) {
             $('#loading-products').removeAttr('hidden');
-            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/12").then( res => res.data.results);
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+this.sortDir+"/"+this.sortBy+"/"+this.searchString).then( res => res.data.results);
             $('#loading-products').hide();
         }
     },
@@ -91,9 +92,9 @@ export default {
         // ***********
         // Filter functions
         // ***********
-        order(orderBy, direction){
+        async order(orderBy, direction){
             if(orderBy=='') return;
-            $("#searchBar").val('');
+            // $("#searchBar").val('');
             // Save the filter settings
             this.sortBy=orderBy;
             this.sortDir=direction;
@@ -102,34 +103,42 @@ export default {
             let textArrow='&#8593;';
 
             if(direction=="des"){ modifier=-1; textArrow='&#8595;'}
-                this.products.sort((p1, p2)=>{
-                    if(p1[orderBy]<p2[orderBy]){ return -1*modifier }
-                    if(p1[orderBy]>p2[orderBy]){ return 1*modifier }
-                    return 0;
-            });
+
+            this.pageNum=1;        // reset page nume
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+modifier+"/"+this.sortBy+"/"+this.searchString)
+                                          .then(res => res.data.results);
+           
+            
             let filterText=orderBy[0].toUpperCase()+orderBy.split('').splice(1).join('');
             $('#filter_dropdown').html(filterText+' '+textArrow);
             this.checkForProductFound();
         },
-        filterCat(category, arrayToFilter){
+        async filterCat(category){
             // Save the filter settings
             this.filterBy=category;
-            $("#searchBar").val('');
+            // $("#searchBar").val('');
 
-            if(category!='All') this.products=arrayToFilter.filter(p => {
-                if(p['category']==category) return 1;
-            });
-            else this.products=arrayToFilter;
+            let sortDir=0;
+            if(this.sortDir=='asc') sortDir='1'; 
+            else if(this.sortDir=='des') sortDir='-1'; 
+            
+            this.pageNum=1;
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+sortDir+"/"+this.sortBy+"/"+this.searchString)
+                                          .then(res => res.data.results);
+            
             $('#categories_dropdown').text(category);
             this.checkForProductFound();
         },
-        search(){
-            let searchString=$("#searchBar").val().toUpperCase();
-            this.products = this.$parent.products.filter(p =>{ if(p['name'].toUpperCase().includes(searchString)){ return 1}});
+        async search(){
+            let searchString=$("#searchBar").val();
+            this.searchString=searchString;
+            this.pageNum=1;        // reset page nume
+            let sortDir=0;
+            if(this.sortDir=='asc') sortDir='1'; 
+            else if(this.sortDir=='des') sortDir='-1'; 
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+sortDir+"/"+this.sortBy+"/"+searchString)
+                                          .then(res => res.data.results);            
             this.checkForProductFound();
-            // Filter the found products with the filter settings
-            this.order(this.sortBy, this.sortDir);
-            this.filterCat(this.filterBy, this.products);
         },
         
         // ***********
@@ -137,21 +146,29 @@ export default {
         // int dir 1 || -1
         // ***********
         async changePage(dir){
+            this.checkForProductFound();
+
             let tempPageNum=this.pageNum+dir;
             if(tempPageNum<1) return 0;
 
-            
             let category=this.filterBy;
-            if(category=='All') category='';
+
+            let sortDir;
             
-            let tempProducts = await axios.get(this.$parent.serverHost+"/products/"+tempPageNum+"/2/"+category).then(res => res.data.results)
+            if(this.sortDir=='asc') sortDir='1'; 
+            else if(this.sortDir=='des') sortDir='-1'; 
+            else sortDir=0;
+            
+            
+            let tempProducts = await axios.get(this.$parent.serverHost+"/products/"+tempPageNum+"/2/"+category+"/"+sortDir+"/"+this.sortBy+"/"+this.searchString)
+                                          .then(res => res.data.results);
+            
+
             if(tempProducts.length==0) return 0; // this.pageNum is the last page
 
             this.products=tempProducts;
+            // this.$parent.products=this.products;
             this.pageNum=tempPageNum;
-
-            // Order the new products
-            this.order(this.sortBy, this.sortDir);
         },
 
         // ***********

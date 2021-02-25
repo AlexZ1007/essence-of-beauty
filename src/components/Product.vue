@@ -44,16 +44,18 @@
 
 <script>
 import $ from 'jquery'
+import axios from 'axios'
 export default {
     props: ['id'],
     data: function(){
         return{
-            product: this.$parent.products.find(product => product._id==this.id),
+            product: {},
             totalPrice: 0,
             cart: this.$parent.cart
         }
     },
-    mounted(){
+    async created(){
+        await axios.get(this.$parent.serverHost+"/products/show/"+this.id).then(res=>this.product=res.data.result[0]);
         this.totalPrice = this.product.price;
     },
     methods:{

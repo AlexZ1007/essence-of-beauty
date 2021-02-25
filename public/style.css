@@ -15,6 +15,9 @@ html, body {
 .bg-lavender{
     background-color: #cbb4e2;
 }
+.navbar{
+    background-color: #a368df;
+}
 #navbar, .main-comp{
     padding-left: 70px !important;    
     padding-right: 70px !important; 
@@ -39,7 +42,13 @@ html, body {
     outline: none;
     box-shadow: none;
 }
-
+.dashboardNav{
+    background-color: #9d7ebd;  
+}
+.b-0{border: 0;}
+.dashboardNav a:active{
+    color: #f346a5;
+}
 #cart{padding-right: 0px}
 .carousel-control-next,
 .carousel-control-prev /*, .carousel-indicators */ {
@@ -80,7 +89,6 @@ img{
     color: rgb(0, 0, 0);
     background-color: #a882ce !important;
 }
-
 .text-color-white{color: white !important;}
 #contact{margin-bottom: 25px;}
 #faq{margin-bottom: 45px;}
@@ -198,6 +206,15 @@ div .bg-danger{
     border: 0;
     outline: none;
 }
+div.alert-corner{
+    position: absolute;
+    bottom: 100px;
+    right: 70px;
+    animation: fadeInRight 1s;
+}
+.alert-error{
+    background-color: rgb(255, 139, 139) !important;
+}
 @keyframes rotateLoading{
     0%{transform: rotate(0deg);}
     100%{transform: rotate(360deg);}
@@ -211,7 +228,17 @@ div .bg-danger{
        opacity: 1;
        transform: translateX(0);
     }
- }   
+}   
+@keyframes fadeInRight {
+    0% {
+       opacity: 0;
+       transform: translateX(20px);
+    }
+    100% {
+       opacity: 1;
+       transform: translateX(0);
+    }
+}   
  
 @media only screen and (max-width: 1000px){
     #topProducts .product{

@@ -78,19 +78,18 @@ export default {
         }
     },
     methods:{
-        buyProducts(){
+        async buyProducts(){
             // Validate
             if(this.cart.length==0) return 0;
             for(let i=0;i<this.cart.length;i++){
                 let cartItem=this.cart[i];
-                let product=this.$parent.products.find(prod=>prod._id==cartItem._id)
-                // TBA: check for stock in db
+                let product;
+                await axios.get(this.$parent.serverHost+"/products/show/"+cartItem._id).then(res=>product=res.data.result[0]);
                 if(product.stock<cartItem.quantity){ 
                     this.displayModal('bg-danger', '<b>Error!</b> There are only <b>'+product.stock+' '+product.name+'</b> remaining and you have <b>'+cartItem.quantity+'</b> in the cart! Adjust the qunatity to complete your purchase!');
                     return;
                 }
-                // Update on client
-                product.stock-=cartItem.quantity;
+                product.stock-=cartItem.quantity
                 // Update on db 
                 axios.put(this.$parent.serverHost+"/products/update/"+cartItem._id, product);
             }

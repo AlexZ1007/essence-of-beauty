@@ -25,8 +25,8 @@ export default {
         {code: 'malakie10', discountBy: 10},
         {code: 'candvreodata', discountBy: 30},
       ],
-      serverHost: "https://essence-of-beauty.herokuapp.com",
-      // serverHost: "http://localhost:8080",
+      // serverHost: "https://essence-of-beauty.herokuapp.com",
+      serverHost: "http://localhost:8080",
     }
   },
   async created(){ 

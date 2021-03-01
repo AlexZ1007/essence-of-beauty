@@ -85,6 +85,11 @@ export default {
                 let cartItem=this.cart[i];
                 let product;
                 await axios.get(this.$parent.serverHost+"/products/show/"+cartItem._id).then(res=>product=res.data.result[0]);
+                console.log(product)
+                if(product==undefined){
+                    this.deleteProduct(i);
+                    continue;
+                }
                 if(product.stock<cartItem.quantity){ 
                     this.displayModal('bg-danger', '<b>Error!</b> There are only <b>'+product.stock+' '+product.name+'</b> remaining and you have <b>'+cartItem.quantity+'</b> in the cart! Adjust the qunatity to complete your purchase!');
                     return;

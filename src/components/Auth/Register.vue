@@ -41,7 +41,6 @@ export default {
                 $(".alert").remove();
                 $(".main-comp:eq(0)").append("<div class='alert alert-dismissible alert-corner text-color-white alert-"+res.data.status 
                     +"'>"+res.data.message+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span> </button></div>")
-                console.log(res.data)
                 if(res.data.status=='error'){
                     return;
                 }
@@ -49,10 +48,8 @@ export default {
                 delete inputs.password;
                 this.$parent.loggedIn=true;
                 this.$parent.loggedInUser=inputs;
-                console.log(this.$parent.loggedInUser);
                 this.$router.push("/");
             });
-            
         }
     }
 }

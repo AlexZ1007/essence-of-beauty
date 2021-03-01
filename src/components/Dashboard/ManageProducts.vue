@@ -208,7 +208,9 @@ export default {
         updateProduct(){
             const formInputs=$('#updateProdForm input');
             let inputs={ category: $('#updateProdForm select option:selected').text(),
-                         description: $('#updateProdForm textarea').val() 
+                         description: $('#updateProdForm textarea').val(),
+                         numOfRatings: 0,
+                         stars: 0, 
                     };
 
             formInputs.each((id,input) => inputs[input.name]=input.value);

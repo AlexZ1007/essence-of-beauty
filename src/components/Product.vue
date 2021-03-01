@@ -67,8 +67,7 @@ export default {
         await axios.get(this.$parent.serverHost+"/products/show/"+this.id).then(res=>this.product=res.data.result[0]);
         this.totalPrice = this.product.price;
         if(this.product.numOfRatings!=0){
-            this.avgStars=this.product.stars/this.product.numOfRatings;
-            // console.log("Prod stars "+this.product.stars);
+            this.avgStars=(this.product.stars/this.product.numOfRatings).toFixed(2);
         }
     },
     async mounted(){
@@ -79,7 +78,6 @@ export default {
                 await axios.get(this.$parent.serverHost+"/rate/view/"+this.id+"/"+this.$parent.loggedInUser._id).then((res)=>{
                    if(res.data.length!=0){
                         this.stars=res.data[0].stars-1;
-                        // console.log("Star: "+this.stars);
                         this.changeWeight(this.stars);
                    }
                 });
@@ -140,12 +138,9 @@ export default {
             }
 
             let stars=id.split('')[4];
-            console.log("New rating:"+stars);
             if(this.stars==-1){ this.product.numOfRatings+=1;}
-            console.log("Old rating:"+this.stars);
             this.product.stars+= ((parseInt(stars))-parseInt(this.stars));
-            console.log(this.product.stars);
-            this.avgStars=this.product.stars/this.product.numOfRatings;
+            this.avgStars=(this.product.stars/this.product.numOfRatings).toFixed(2);
 
             this.stars=stars;
             axios.post(this.$parent.serverHost+'/rate/add/'+this.id+'/'+this.$parent.loggedInUser._id, {rating: this.stars});

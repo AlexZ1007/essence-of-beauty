@@ -1,11 +1,11 @@
 <template>
     <div class="main-comp container-fluid">
         <dashboard-nav></dashboard-nav>
-        <div class="row justify-content-center m-0">
-            <div class="col-lg-4 col-md-4 mb-2 col-sm-12 mr-3 px-4 py-3 dashboard-stats bg-darkPurple text-white">
+        <div class="row justify-content-center ml-2 mr-1">
+            <div class="col-lg-4 col-md-5 mb-2 col-sm-12 mr-3 px-4 py-3 dashboard-stats bg-darkPurple text-white">
                 <h5> <i class="fas fa-user"></i> Registered accounts: {{regAccountsNum}}</h5>
             </div>
-            <div class="col-lg-4 col-md-4 mb-2 col-sm-12 mr-3 px-4 py-3 dashboard-stats bg-darkPurple text-white">
+            <div class="col-lg-4 col-md-5 mb-2 col-sm-12 mr-3 px-4 py-3 dashboard-stats bg-darkPurple text-white">
                 <h5> <i class="fas fa-store"></i> Products: {{productsNum}}</h5>
             </div>
         </div>

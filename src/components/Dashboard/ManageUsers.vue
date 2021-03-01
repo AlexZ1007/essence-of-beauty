@@ -1,7 +1,7 @@
 <template>
     <div class="main-comp container-fluid">
         <dashboard-nav></dashboard-nav>
-         <div class="input-group col-lg-3 col-md-5 col-sm-12 ml-auto mb-3">
+         <div class="input-group col-lg-3 col-md-5 col-sm-12  mb-3 pl-0">
                 <input type="text" class="form-control" placeholder="Search for a user" aria-label="Search for product" id="searchBar">
                 <div class="input-group-append btn-search" v-on:click="search()">
                         <span class="input-group-text bg-pink"><i class="fa fa-search"></i></span>

@@ -190,6 +190,23 @@ div .bg-danger{
     margin-bottom: 0.5em !important;
     min-height: 72px !important;
 }
+.stars{
+    font-size: 1.3em;
+    color: yellow
+}
+.stars span{
+    font-size: 0.8em;
+    color: black;
+    cursor: default;
+}
+.fa-star{
+    /* padding-left: 3px; */
+    padding: 5px 5px;
+}
+
+
+
+
 #loading-products{
     height: 70px;
     width: 70px;
@@ -215,6 +232,16 @@ div.alert-corner{
 .alert-error{
     background-color: rgb(255, 139, 139) !important;
 }
+.btn-style-none{
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+.btn-options:hover i{
+    color: #b30966;
+}
+
+
 @keyframes rotateLoading{
     0%{transform: rotate(0deg);}
     100%{transform: rotate(360deg);}

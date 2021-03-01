@@ -104,13 +104,17 @@ export default {
             this.discountCode= {discountBy: 0};
             this.codeApplied= false;
         },
-        discount(){
+        async discount(){
             let codeInputVal=$("#codeInput").val();
-            this.discountCode=this.$parent.discountCodes.find( code => {if(code['code']==codeInputVal) return 1;});
+            let codes=[];
+            await axios.get(this.$parent.serverHost+'/discount/code/'+codeInputVal)
+                      .then(res => codes=res.data);
 
             if(this.codeApplied){ this.printAlert('alert-danger', 'You have already applied a code!'); return 0;}
-            else if(this.discountCode==undefined){ this.printAlert('alert-danger', 'Invalid code!'); return 0;}
+            else if(codes.length==0){ this.printAlert('alert-danger', 'Invalid code!'); return 0;}
           
+            this.discountCode=codes[0];
+
             let totalPrice=$('#totalPrice b').text(); 
             totalPrice = parseFloat(totalPrice.split('').splice(1).join(''), 2)   // Remove the $ symbol and transform to int
             totalPrice -= (this.discountCode.discountBy/100)*totalPrice;

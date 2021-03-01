@@ -10,6 +10,7 @@ import Register from '../components/Auth/Register.vue'
 import Dashboard from '../components/Dashboard/Dashboard.vue'
 import ManageUsers from '../components/Dashboard/ManageUsers.vue'
 import ManageProducts from '../components/Dashboard/ManageProducts.vue'
+import ManageDiscount from '../components/Dashboard/ManageDiscountCodes.vue'
 
 Vue.use(VueRouter)
 
@@ -64,8 +65,13 @@ const routes = [
   },
   {
     path: '/dashboard/products',
-    name: 'DashbManageProducts',
+    name: 'DashboardManageProducts',
     component: ManageProducts,
+  },
+  {
+    path: '/dashboard/discount',
+    name: 'DashboardManageDiscount',
+    component: ManageDiscount,
   },
 ]
 

@@ -8,6 +8,9 @@
                 <li class="nav-item">
                     <router-link class="nav-link text-white" to="/dashboard/products">Products</router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link class="nav-link text-white" to="/dashboard/discount">Discount Codes</router-link>
+                </li>
             </ul>
         </div>
     </nav>

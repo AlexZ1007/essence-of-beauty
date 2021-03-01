@@ -25,7 +25,8 @@ export default {
         {code: 'malakie10', discountBy: 10},
         {code: 'candvreodata', discountBy: 30},
       ],
-      serverHost: "https://essence-of-beauty.herokuapp.com"
+      // serverHost: "https://essence-of-beauty.herokuapp.com",
+      serverHost: "http://localhost:8080",
     }
   },
   async created(){ 
@@ -38,10 +39,10 @@ export default {
 
   methods:{
     checkIfLoggedIn(){
-      if(!this.loggedIn) this.$router.push("/");
+      if(!this.loggedIn) this.$router.push("/").catch(()=>{});
     },
     checkForAdmin(){
-      if(!this.loggedInUser.adminPermission) this.$router.push("/");
+      if(!this.loggedInUser.adminPermission) this.$router.push("/").catch(()=>{});
     },
   },
   watch:{

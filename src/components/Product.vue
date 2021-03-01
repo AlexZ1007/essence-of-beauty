@@ -107,7 +107,8 @@ export default {
             // Check if there is already a product in the cart
             if(this.cart.find(p => p._id==product._id)!=undefined) this.cart.find(p => {
                 if(p._id==product._id){ 
-                    p.quantity=parseInt(p.quantity)+parseInt(quantity); 
+                    p.quantity=parseInt(p.quantity)+parseInt(quantity);
+                    p.totalPrice=parseInt(p.quantity)*parseFloat(p.price);
                     return 1; 
                 }
               });

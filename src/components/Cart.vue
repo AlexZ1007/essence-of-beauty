@@ -129,6 +129,7 @@ export default {
             this.codeApplied=true;
         },
         updateTotalData(){
+            console.log(this.cart);
             let totalItemsPrice=0;
             let totalItemsQuantity=0;
             for(let i=0;i<this.cart.length;i++){

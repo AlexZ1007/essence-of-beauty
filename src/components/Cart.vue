@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 <tr v-for="(product,index) in cart" :key="index">
-                    <td><img src="https://via.placeholder.com/64X32" alt=""></td>
+                    <td><img :src="product.images[0]" style="max-height: 32px; max-width:64px;"></td>
                     <th>{{product.name}}</th>
                     <td>${{product.totalPrice}}</td>
                     <td>${{product.price}}</td>
@@ -69,6 +69,7 @@ export default {
         $("#app").addClass("m_-45");
         if(localStorage.cart) this.cart=JSON.parse(localStorage.cart);
         this.updateTotalData();
+
     },
     data: function(){
         return {
@@ -85,7 +86,6 @@ export default {
                 let cartItem=this.cart[i];
                 let product;
                 await axios.get(this.$parent.serverHost+"/products/show/"+cartItem._id).then(res=>product=res.data.result[0]);
-                console.log(product)
                 if(product==undefined){
                     this.deleteProduct(i);
                     continue;
@@ -99,7 +99,7 @@ export default {
                 axios.put(this.$parent.serverHost+"/products/update/"+cartItem._id, product);
             }
             
-            this.displayModal('bg-darkPurple', 'Products bought successfully!');
+            this.displayModal('bg-darkPurple', '<i class="fas fa-check-circle"></i> <br> Products bought successfully!');
             // Reset all variables
             this.cart=[];
             this.$parent.cart=[];
@@ -129,7 +129,6 @@ export default {
             this.codeApplied=true;
         },
         updateTotalData(){
-            console.log(this.cart);
             let totalItemsPrice=0;
             let totalItemsQuantity=0;
             for(let i=0;i<this.cart.length;i++){

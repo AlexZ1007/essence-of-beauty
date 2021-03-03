@@ -46,8 +46,8 @@ html, body {
     background-color: #9d7ebd;  
 }
 .b-0{border: 0;}
-.dashboardNav a:active{
-    color: #f346a5;
+.dashboardNav a.active{
+    color: #f346a5 !important;
 }
 #cart{padding-right: 0px}
 .carousel-control-next,
@@ -111,6 +111,9 @@ img{
     color: rgb(255, 255, 255);
     font-weight: bolder;
 }
+.fa-check-circle{
+    font-size: 2em;
+}
 .btn-buy:hover{
     text-decoration: none;
     color: rgb(255, 255, 255);
@@ -120,8 +123,21 @@ img{
 .btn-search:hover{
     cursor: pointer;
 }
+#desc{
+    word-wrap: break-word;
+}
+pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+   }
 .filters{
     background-color: #a882ce ;
+}
+button.mt-3{
+    margin-top: 10px;
 }
 #shop-items h3{
     font-weight: bold;
@@ -240,7 +256,9 @@ div.alert-corner{
 .btn-options:hover i{
     color: #b30966;
 }
-
+.fa-star{
+    color: yellow;
+}
 
 @keyframes rotateLoading{
     0%{transform: rotate(0deg);}
@@ -302,7 +320,6 @@ div.alert-corner{
 
     }
 }
-
 /*Disable arorws for number inputs*/
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

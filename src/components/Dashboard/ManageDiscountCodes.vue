@@ -2,7 +2,7 @@
     <div class="main-comp container-fluid">
         <dashboard-nav></dashboard-nav>
         <div class="row mb-3 ">
-            <div class="input-group col-lg-3 col-md-5 col-sm-12 my-auto">
+            <div class="input-group col-lg-3 col-md-5 col-sm-12 my-auto pb-lg-0 pb-sm-2">
                 <input type="text" class="form-control" placeholder="Search for a code" aria-label="Search for a code" id="searchBar">
                 <div class="input-group-append btn-search" v-on:click="search()">
                         <span class="input-group-text bg-pink"><i class="fa fa-search"></i></span>
@@ -74,7 +74,7 @@
                             </div>    
                             <div class="form-group">
                                 <label for="discountBy" class="form-label">Discount By:</label>
-                                <input type="number" id="discountBy" name="discountBy" class="form-control" min="0" required>
+                                <input type="number" id="discountBy" name="discountBy" class="form-control" min="0" max="100" required>
                             </div>              
                                    
                             <button type="submit" class="btn btn-purple text-color-white">Add code</button>    
@@ -99,6 +99,7 @@ export default {
     mounted(){
         this.$parent.checkIfLoggedIn();
         this.$parent.checkForAdmin();
+        $('.codes').addClass('active')
         $("#app").addClass("m_-45");
     },
     data(){

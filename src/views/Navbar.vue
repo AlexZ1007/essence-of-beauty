@@ -26,9 +26,9 @@
                  <router-link id="cart" class="nav-link mr-3" to="/cart" >Cart</router-link>
                  <div v-if="this.$parent.loggedIn==false" class="row">
                     <router-link id="btnRegister" class="nav-link" to="/register" >Register</router-link>
-                    <router-link id="btnLogin" class="nav-link " to="/login" >Login</router-link>
+                    <router-link id="btnLogin" class="nav-link ml-0 pl-lg-3 pl-sm-0" to="/login" >Login</router-link>
                 </div>
-                 <div v-else class="row">
+                 <div v-else class="row m-0">
                     <router-link id="btnLogout" class="nav-link" to="/logout" event="" @click.native.prevent="logout()">Logout</router-link>
                 </div>
             </div>

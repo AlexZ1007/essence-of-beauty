@@ -46,6 +46,7 @@ export default {
     mounted(){
         this.$parent.checkIfLoggedIn();
         this.$parent.checkForAdmin();
+        $('.users').addClass('active')
         $("#app").addClass("m_-45");
     },
     methods:{

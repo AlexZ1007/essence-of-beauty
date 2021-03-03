@@ -2,14 +2,14 @@
     <div class="main-comp container-fluid">
         <dashboard-nav></dashboard-nav>
         <div class="row mb-3 ">
-            <div class="input-group col-lg-3 col-md-5 col-sm-12 my-auto">
+            <div class="input-group col-lg-3 col-md-5 col-sm-12 my-auto pb-lg-0 pb-sm-2">
                 <input type="text" class="form-control" placeholder="Search for a product" aria-label="Search for a product" id="searchBar">
                 <div class="input-group-append btn-search" v-on:click="search()">
                         <span class="input-group-text bg-pink"><i class="fa fa-search"></i></span>
                 </div>
             </div>
 
-            <button class="bg-pink  my-auto  btn text-white btn-buy ml-auto mr-3" data-toggle="modal" data-target="#insertProd">Add a product</button>
+            <button class="bg-pink  my-auto  btn text-white btn-buy ml-auto mr-3" data-toggle="modal" data-target="#insertProd" v-on:click="resetForm('#addProd')">Add a product</button>
 
         </div>
         
@@ -80,9 +80,14 @@
                             <div class="form-group">
                                 <label for="category" class="form-label mr-4">Category:</label>
                                 <select class="form-control" id="category" name="category">
-                                    <option>Farduri</option>
+                                    <option>Fata</option>
                                     <option>Accesorii</option>
-                                    <option>Produse fata</option>
+                                    <option>Ochi</option>
+                                    <option>Buze</option>
+                                    <option>Sprancene</option>
+                                    <option>Gene</option>
+                                    <option>Unghii</option>
+                                    <option>Ten</option>
                                 </select>              
                             </div>  
                             <div class="form-group">
@@ -97,7 +102,10 @@
                                 <label for="description" class="form-label">Description:</label>
                                 <textarea class="form-control" name="description" id="description" cols="40" rows="4" required></textarea>
                             </div>         
-                                   
+                            <div class="form-group">
+                                <button type="button" v-on:click="uploadWidget()" id="upload_widget" class="cloudinary-button">Upload pictures</button>       
+                                <br><span id="photosError" class="text-danger"></span>
+                            </div>
                             <button type="submit" class="btn btn-purple text-color-white">Add product</button>    
                         </form>
         
@@ -126,9 +134,14 @@
                             <div class="form-group">
                                 <label for="category" class="form-label mr-4">Category:</label>
                                 <select class="form-control" id="updCategory" name="category" :value="productToUpdate.category">
-                                    <option>Farduri</option>
+                                    <option>Fata</option>
                                     <option>Accesorii</option>
-                                    <option>Produse fata</option>
+                                    <option>Ochi</option>
+                                    <option>Buze</option>
+                                    <option>Sprancene</option>
+                                    <option>Gene</option>
+                                    <option>Unghii</option>
+                                    <option>Ten</option>
                                 </select>              
                             </div>  
                             <div class="form-group">
@@ -160,7 +173,8 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import dashboardNav from './DashboardNav'                    
+import dashboardNav from './DashboardNav'         
+// import cloudinary from 'cloudinary-vue'           
 export default {
     components: {
         'dashboard-nav': dashboardNav
@@ -168,11 +182,14 @@ export default {
     mounted(){
         this.$parent.checkIfLoggedIn();
         this.$parent.checkForAdmin();
+        // Highlight the button
+        $('.products').addClass('active')
         $("#app").addClass("m_-45");
     },
     data(){
         return{
             products: [],
+            imagesToAdd: [],
             itemIndexToDelete: -1,
             itemIndexToUpdate: 0,
             productToUpdate:{
@@ -199,9 +216,21 @@ export default {
             this.productToUpdate = this.products[index];
         },
         addProduct(){
+            $('#photosError').text("");
             const formInputs=$('#addProd input');
-            let inputs={ category: $('#addProd select option:selected').text(), description: $('#addProd textarea').val() };
+            if(this.imagesToAdd.length==0){
+                $('#photosError').text("You need at least one photo");
+                return;
+            }
+            let inputs={    category: $('#addProd select option:selected').text(), 
+                            description: $('#addProd textarea').val(),
+                            images: this.imagesToAdd,
+                            numOfRatings:0,
+                            stars:0,
+            };
             formInputs.each((id,input) => inputs[input.name]=input.value);
+            inputs.price=parseFloat(inputs.price);
+            inputs.stock=parseFloat(inputs.stock);
             axios.post(this.$parent.serverHost+"/products/create", inputs);
             $('#insertProd').modal('hide');
         },
@@ -210,10 +239,11 @@ export default {
             let inputs={ category: $('#updateProdForm select option:selected').text(),
                          description: $('#updateProdForm textarea').val(),
                          numOfRatings: 0,
-                         stars: 0, 
+                         stars: 0,
                     };
-
             formInputs.each((id,input) => inputs[input.name]=input.value);
+            inputs.price=parseFloat(inputs.price);
+            inputs.stock=parseFloat(inputs.stock);
             axios.put(this.$parent.serverHost+"/products/update/"+this.productToUpdate._id, inputs);
             let _id=this.productToUpdate._id;
             this.products[this.itemIndexToUpdate]=inputs;
@@ -228,6 +258,22 @@ export default {
             let product=this.products[this.itemIndexToDelete];
             this.products.splice(this.itemIndexToDelete, 1);
             axios.delete(this.$parent.serverHost+"/products/delete/"+product._id);
+        },
+        uploadWidget(){
+            this.imagesToAdd=[];
+             window.cloudinary.openUploadWidget(
+                { cloud_name: 'alx100704',
+                upload_preset: 'ml_default'
+                },
+                (error, result) => {
+                if (!error && result && result.event === "success") {
+                        console.log(result.info.url);
+                        this.imagesToAdd.push(result.info.url);          
+                    }
+                }).open();
+        },
+        resetForm(selector){
+            $(selector)[0].reset();
         }
     }
 }

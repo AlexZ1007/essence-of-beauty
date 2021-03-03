@@ -24,8 +24,13 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" v-on:click="filterCat('All')">All</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Produse fata')">Produse fata</a>
-                            <a class="dropdown-item" v-on:click="filterCat('Farduri')">Farduri</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Fata')">Fata</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Ochi')">Ochi</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Gene')">Gene</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Buze')">Buze</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Ten')">Ten</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Unghii')">Unghii</a>
+                            <a class="dropdown-item" v-on:click="filterCat('Sprancene')">Sprancene</a>
                             <a class="dropdown-item" v-on:click="filterCat('Accesorii')">Accesorii</a>
                         </div>
                     </div>
@@ -43,19 +48,21 @@
 
             <div id="loading-products" class="mx-auto" hidden="true"></div>
             <div class="row m-0 pageNavigation">
-                <button v-on:click="changePage(-1)" class="py-1 px-2 bg-pink btn-buy">Previous page</button>
+                <button v-on:click="changePage(-1)" class="py-1 px-2 bg-pink btn-buy mb-2">Previous page</button>
                 <span class="mx-auto"><b>Page {{pageNum}}</b></span>
-                <button v-on:click="changePage(1)"  class=" b-0 py-1 px-2 bg-pink btn-buy my-auto">Next Page</button>
+                <button v-on:click="changePage(1)"  class=" b-0 py-1 px-2 bg-pink btn-buy my-auto mb-2">Next Page</button>
             </div>
             <div class="row justify-content-center m-0 col-lg-12 col-md-12 col-sm-12">
                 <div class="col-lg-3 col-md-5 col-sm-11 shop-item text-center pt-3 p-2 mr-4 my-2 ml-0 text-white bg-darkPurple product"
                       v-for="(product,index) in products"  v-bind:key="index" >
-                    <div class="col-12 text-center"><img src="https://via.placeholder.com/250X90" class="img-fluid"></div>
+                    <div class="col-12 text-center"><img :src="product.images[0]" alt="" style="max-height: 90px; max-width:250px;" class="img-fluid"></div>
                     <div class="info-product col-12 py-3">
                         <h4>{{product.name}}</h4>
                         <p>{{product.description.substring(0,80)+'...'}}</p>
                     </div>
-                    <div class="buy col-12 d-flex align-content-center mb-2">
+                    <b class="my-auto float-left mb-2 ml-3">  {{(product.stars/product.numOfRatings).toFixed(2)}} <i class="fas fa-star pl-0"></i></b>
+
+                    <div class="buy col-12 d-flex align-content-center mb-2"> 
                         <b class="my-auto">${{product.price}}</b>
                         <router-link :to="'/shop/product/'+product._id" class="ml-auto py-1 px-2 bg-pink btn-buy my-auto">Buy now</router-link>
                     </div>
@@ -84,7 +91,7 @@ export default {
     async mounted(){
         if(this.$parent.products.length==0) {
             $('#loading-products').removeAttr('hidden');
-            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+this.sortDir+"/"+this.sortBy+"/"+this.searchString).then( res => res.data.results);
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/12/"+this.filterBy+"/"+this.sortDir+"/"+this.sortBy+"/"+this.searchString).then( res => res.data.results);
             $('#loading-products').hide();
         }
     },
@@ -94,8 +101,6 @@ export default {
         // ***********
         async order(orderBy, direction){
             if(orderBy=='') return;
-            // $("#searchBar").val('');
-            // Save the filter settings
             this.sortBy=orderBy;
             this.sortDir=direction;
 
@@ -105,7 +110,8 @@ export default {
             if(direction=="des"){ modifier=-1; textArrow='&#8595;'}
 
             this.pageNum=1;        // reset page nume
-            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+modifier+"/"+this.sortBy+"/"+this.searchString)
+            console.log(this.$parent.serverHost+"/products/"+this.pageNum+"/12/"+this.filterBy+"/"+modifier+"/"+this.sortBy+"/"+this.searchString);
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/12/"+this.filterBy+"/"+modifier+"/"+this.sortBy+"/"+this.searchString)
                                           .then(res => res.data.results);
            
             
@@ -123,7 +129,7 @@ export default {
             else if(this.sortDir=='des') sortDir='-1'; 
             
             this.pageNum=1;
-            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+sortDir+"/"+this.sortBy+"/"+this.searchString)
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/12/"+this.filterBy+"/"+sortDir+"/"+this.sortBy+"/"+this.searchString)
                                           .then(res => res.data.results);
             
             $('#categories_dropdown').text(category);
@@ -136,7 +142,7 @@ export default {
             let sortDir=0;
             if(this.sortDir=='asc') sortDir='1'; 
             else if(this.sortDir=='des') sortDir='-1'; 
-            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/2/"+this.filterBy+"/"+sortDir+"/"+this.sortBy+"/"+searchString)
+            this.products= await axios.get(this.$parent.serverHost+"/products/"+this.pageNum+"/12/"+this.filterBy+"/"+sortDir+"/"+this.sortBy+"/"+searchString)
                                           .then(res => res.data.results);            
             this.checkForProductFound();
         },
@@ -160,7 +166,7 @@ export default {
             else sortDir=0;
             
             
-            let tempProducts = await axios.get(this.$parent.serverHost+"/products/"+tempPageNum+"/2/"+category+"/"+sortDir+"/"+this.sortBy+"/"+this.searchString)
+            let tempProducts = await axios.get(this.$parent.serverHost+"/products/"+tempPageNum+"/12/"+category+"/"+sortDir+"/"+this.sortBy+"/"+this.searchString)
                                           .then(res => res.data.results);
             
 

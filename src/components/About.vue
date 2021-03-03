@@ -8,7 +8,7 @@
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla voluptate illo quae neque harum dolor quisquam error doloremque qui maiores expedita commodi, eveniet ad tempore veritatis reprehenderit amet odio aliquam.
                 </div>    
                 <div class="col-lg-5 col-md-12  my-auto text-center">
-                    <img src="https://via.placeholder.com/500X250" alt="" class="img-fluid">
+                    <img src="../assets/aboutPic.jpg" alt="" class="img-fluid">
                 </div>    
             </div>
         </div>
@@ -64,7 +64,7 @@
 
         <div id="contact">
             <h2>Contact Us</h2>
-            <form action="">
+            <form action="mailto:essenceofbeauty@gmail.com">
                 <div class="form-group">
                     <label for="" class="form-label">Name: </label>
                     <input type="text" class="form-control" required>

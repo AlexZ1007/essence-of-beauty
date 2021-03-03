@@ -3,12 +3,12 @@
         <div class="row">
             <div class="col-lg-8 col-md-12 col-sm-12">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                        <img class="d-block w-100 img-fluid" src="../assets/mac2.png" alt="First slide" width="1200" height="500">
-                        </div>
-                        <div class="carousel-item">
-                        <img class="d-block w-100 img-fluid" src="../assets/mac3.png" alt="Second slide" width="1200" height="500">
+                    <div class="carousel-inner" >
+                        <!-- <div class="carousel-item active">
+                            <img class="d-block w-100 img-fluid" :src="product.images[0]" alt="Slide"  style="min-height: 400px; max-height: 400px;">
+                        </div> -->
+                        <div class="carousel-item" v-for="(image) in (product.images)" :key="image">
+                            <img class="d-block w-100 img-fluid" :src="image" alt="Slide" style="min-height: 400px; max-height: 400px;">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -45,7 +45,7 @@
             </div>    
         </div>  
             <h3><b>Description</b></h3>
-            <p id="desc">{{product.description}}</p>
+            <p id="desc"><pre>{{product.description}}</pre></p>
     </div> 
 </template>
 
@@ -63,6 +63,7 @@ export default {
             avgStars:0,
         }
     },
+
     async created(){
         await axios.get(this.$parent.serverHost+"/products/show/"+this.id).then(res=>this.product=res.data.result[0]);
         this.totalPrice = this.product.price;
@@ -70,18 +71,25 @@ export default {
             this.avgStars=(this.product.stars/this.product.numOfRatings).toFixed(2);
         }
     },
+
     async mounted(){
+        
+        
         // Add event listener for stars
         $(".fa-star").click((event)=>{  this.rate(event.target.id)});
         // Load rating
         if(this.$parent.loggedIn){
                 await axios.get(this.$parent.serverHost+"/rate/view/"+this.id+"/"+this.$parent.loggedInUser._id).then((res)=>{
                    if(res.data.length!=0){
+
                         this.stars=res.data[0].stars-1;
                         this.changeWeight(this.stars);
                    }
                 });
         }
+    },
+    updated(){
+        $('.carousel-item').first().addClass('active');
     },
     methods:{
         updateTotalPrice(){
@@ -119,6 +127,7 @@ export default {
                 quantity: quantity,
                 max_quantity: product.stock,
                 totalPrice: (product.price*quantity).toFixed(2),
+                images: product.images,
               });
             // Display alert
             this.printAlert('alert-success', 'Product added to cart!')

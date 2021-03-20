@@ -1,4 +1,15 @@
-# client
+# Essence of Beauty - client
+
+Essence of Beauty is an online store.
+
+I learned from this project:
+* Vue
+* Vue routing
+* Api calls using axios
+* Boostrap grid layout
+
+
+Live demo: https://essence-of-beauty.netlify.app/
 
 ## Project setup
 ```
@@ -15,10 +26,3 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

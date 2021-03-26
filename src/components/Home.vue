@@ -25,9 +25,12 @@
             </a>
         </div>
         <div class="info">
-            <h2>Info</h2>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Velit, incidunt, quidem atque voluptates
-                 modi magnam similique minima sequi blanditiis amet perferendis numquam fuga sunt quae, dignissimos quia inventore. Debitis, libero? Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur officia asperiores ad aliquid provident temporibus non harum voluptates molestias fuga? At fugiat minus dolorem neque voluptate sequi amet cupiditate eveniet.
+            <h2>The Story</h2>
+            <p class="fs-info">
+                Essence of Beauty is a well-renowned online store that has continually featured a variety of high-quality and affordable products since day one.
+                <br>
+                <br>
+                Our passion for excellence has driven us from the beginning, and continues to drive us into the future. The team at Essence of Beauty knows that every product counts, and strives to make the entire shopping experience as rewarding and fun as possible. Check out our store and special offers, and get in touch with questions or requests.
             </p>
         </div>
 

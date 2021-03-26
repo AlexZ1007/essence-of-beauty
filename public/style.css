@@ -30,7 +30,7 @@ html, body {
     margin-left: 15px;
 }
 #navbar .collapse a.router-link-exact-active {
-    color: #f346a5;
+    color: #452f5e;
 }
 .bg-pink{background-color: #f346a5 !important;}
 #navbar .collapse{
@@ -47,7 +47,7 @@ html, body {
 }
 .b-0{border: 0;}
 .dashboardNav a.active{
-    color: #f346a5 !important;
+    color: #452f5e !important;
 }
 #cart{padding-right: 0px}
 .carousel-control-next,
@@ -259,7 +259,27 @@ div.alert-corner{
 .fa-star{
     color: yellow;
 }
-
+.fs-info{
+    font-size: 1.2em;
+}
+.grid-faq{
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0, 1fr));
+    grid-gap: 1em;
+}
+.grid-faq > div{
+    border-radius: 10px;
+    min-width: 0px;
+    word-wrap: break-word  !important;
+}
+.vertical-center{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.socialMedia i{
+    font-size: 2em;
+}
 @keyframes rotateLoading{
     0%{transform: rotate(0deg);}
     100%{transform: rotate(360deg);}
@@ -288,6 +308,9 @@ div.alert-corner{
 @media only screen and (max-width: 1000px){
     #topProducts .product{
         margin-bottom: 15px;
+    }
+    .grid-faq{
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 @media only screen and (max-width: 950px){

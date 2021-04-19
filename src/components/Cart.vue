@@ -42,6 +42,7 @@
                 </div>
             </div>
             <button id="cart-buy" class="float-right btn bg-pink text-white" v-on:click="buyProducts()">Buy</button>
+           
         </div>
         <!-- Modal pop-up -->
         <div class="modal fade" id="productBoughtModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -53,6 +54,7 @@
                         </button>
                         </div>
                     <div class="modal-body text-center">
+                        <payment></payment>
                     </div>
                 </div>
             </div>
@@ -64,7 +66,9 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
+import payment from './Helper/Payment.vue'
 export default {
+    components: {payment},
     mounted(){
         $("#app").addClass("m_-45");
         if(localStorage.cart) this.cart=JSON.parse(localStorage.cart);
@@ -99,7 +103,7 @@ export default {
                 axios.put(this.$parent.serverHost+"/products/update/"+cartItem._id, product);
             }
             
-            this.displayModal('bg-darkPurple', '<i class="fas fa-check-circle"></i> <br> Products bought successfully!');
+            this.displayModal('bg-darkPurple', '', 1);
             // Reset all variables
             this.cart=[];
             this.$parent.cart=[];
@@ -153,13 +157,13 @@ export default {
             this.updateTotalData();
         },
         // Helper functions
-        displayModal(className, message){
+        displayModal(className, message, ok=0){
             let modal = $('#productBoughtModal');
             // Remove all bg classes
             $('.modal-content:eq(0)').removeClass('bg-darkPurple').removeClass('bg-danger');
             // // Add class
             $('.modal-content').addClass(className);
-            $('.modal-body').html(message);
+            if(!ok)    $('.modal-body').html(message);
             modal.modal('show');
         },
         printAlert(type, message){
